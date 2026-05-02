@@ -1,0 +1,245 @@
+================================================================================
+                    ESSENTIAL CODE - SQL & JAVA
+================================================================================
+
+================================================================================
+                           PART 1: SQL
+================================================================================
+
+-- Create Database
+CREATE DATABASE IF NOT EXISTS portfolio;
+USE portfolio;
+
+-- Users Table (for authentication)
+CREATE TABLE IF NOT EXISTS users (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Contact Messages Table
+CREATE TABLE IF NOT EXISTS contact_messages (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL,
+    subject VARCHAR(200),
+    message TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Projects Table
+CREATE TABLE IF NOT EXISTS projects (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    description TEXT,
+    technologies VARCHAR(255),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Insert Sample Data
+INSERT INTO projects (title, description, technologies) VALUES
+('E-Commerce System', 'Full shopping platform with cart', 'PHP, MySQL, HTML, CSS'),
+('Student Management', 'Java desktop application', 'Java, MySQL, Swing'),
+('Calculator App', 'Scientific calculator', 'HTML, CSS, JS');
+
+
+-- For Java Project - Create Student Table
+CREATE DATABASE IF NOT EXISTS studentdb;
+USE studentdb;
+
+CREATE TABLE IF NOT EXISTS students (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150),
+    phone VARCHAR(20),
+    department VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+================================================================================
+                           PART 2: JAVA
+================================================================================
+
+// ===================== STUDENT.java =====================
+public class Student {
+    private int id;
+    private String name;
+    private String email;
+    private String phone;
+    private String department;
+
+    public Student() {}
+
+    public Student(int id, String name, String email, String phone, String department) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.department = department;
+    }
+
+    // Getters and Setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+    public String getDepartment() { return department; }
+    public void setDepartment(String department) { this.department = department; }
+}
+
+// ===================== DBConnection.java =====================
+import java.sql.*;
+public class DBConnection {
+    private static final String URL = "jdbc:mysql://localhost:3306/studentdb";
+    private static final String USER = "root";
+    private static final String PASSWORD = "";
+
+    public static Connection getConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (Exception e) {
+            throw new SQLException("Connection failed", e);
+        }
+    }
+
+    public static void close(Connection conn) {
+        try { if (conn != null) conn.close(); } catch (SQLException e) {}
+    }
+}
+
+// ===================== StudentDAO.java =====================
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class StudentDAO {
+
+    // Add Student
+    public boolean add(Student s) {
+        String sql = "INSERT INTO students (name, email, phone, department) VALUES (?, ?, ?, ?)";
+        try (Connection c = DBConnection.getConnection(); PreparedStatement p = c.prepareStatement(sql)) {
+            p.setString(1, s.getName());
+            p.setString(2, s.getEmail());
+            p.setString(3, s.getPhone());
+            p.setString(4, s.getDepartment());
+            return p.executeUpdate() > 0;
+        } catch (SQLException e) { e.printStackTrace(); return false; }
+    }
+
+    // Get All Students
+    public List<Student> getAll() {
+        List<Student> list = new ArrayList<>();
+        try (Connection c = DBConnection.getConnection(); Statement s = c.createStatement(); ResultSet r = s.executeQuery("SELECT * FROM students")) {
+            while (r.next()) {
+                Student st = new Student();
+                st.setId(r.getInt("id"));
+                st.setName(r.getString("name"));
+                st.setEmail(r.getString("email"));
+                st.setPhone(r.getString("phone"));
+                st.setDepartment(r.getString("department"));
+                list.add(st);
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return list;
+    }
+
+    // Update Student
+    public boolean update(Student s) {
+        String sql = "UPDATE students SET name=?, email=?, phone=?, department=? WHERE id=?";
+        try (Connection c = DBConnection.getConnection(); PreparedStatement p = c.prepareStatement(sql)) {
+            p.setString(1, s.getName());
+            p.setString(2, s.getEmail());
+            p.setString(3, s.getPhone());
+            p.setString(4, s.getDepartment());
+            p.setInt(5, s.getId());
+            return p.executeUpdate() > 0;
+        } catch (SQLException e) { e.printStackTrace(); return false; }
+    }
+
+    // Delete Student
+    public boolean delete(int id) {
+        String sql = "DELETE FROM students WHERE id=?";
+        try (Connection c = DBConnection.getConnection(); PreparedStatement p = c.prepareStatement(sql)) {
+            p.setInt(1, id);
+            return p.executeUpdate() > 0;
+        } catch (SQLException e) { e.printStackTrace(); return false; }
+    }
+}
+
+// ===================== Main.java =====================
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        StudentDAO dao = new StudentDAO();
+        
+        while (true) {
+            System.out.println("\n--- STUDENT MANAGEMENT ---");
+            System.out.println("1. Add  2. View  3. Update  4. Delete  5. Exit");
+            System.out.print("Choice: ");
+            int ch = sc.nextInt(); sc.nextLine();
+            
+            switch (ch) {
+                case 1: // Add
+                    System.out.print("Name: "); String n = sc.nextLine();
+                    System.out.print("Email: "); String e = sc.nextLine();
+                    System.out.print("Phone: "); String p = sc.nextLine();
+                    System.out.print("Department: "); String d = sc.nextLine();
+                    dao.add(new Student(0, n, e, p, d));
+                    System.out.println("Added!");
+                    break;
+                    
+                case 2: // View
+                    for (Student s : dao.getAll()) 
+                        System.out.println(s.getId() + " | " + s.getName() + " | " + s.getEmail() + " | " + s.getDepartment());
+                    break;
+                    
+                case 3: // Update
+                    System.out.print("ID: "); int uid = sc.nextInt(); sc.nextLine();
+                    System.out.print("Name: "); String un = sc.nextLine();
+                    System.out.print("Email: "); String ue = sc.nextLine();
+                    System.out.print("Phone: "); String up = sc.nextLine();
+                    System.out.print("Department: "); String ud = sc.nextLine();
+                    dao.update(new Student(uid, un, ue, up, ud));
+                    System.out.println("Updated!");
+                    break;
+                    
+                case 4: // Delete
+                    System.out.print("ID: "); int did = sc.nextInt();
+                    dao.delete(did);
+                    System.out.println("Deleted!");
+                    break;
+                    
+                case 5:
+                    System.out.println("Goodbye!");
+                    return;
+            }
+        }
+    }
+}
+
+================================================================================
+                           HOW TO RUN
+================================================================================
+
+FOR SQL:
+1. Open phpMyAdmin (http://localhost/phpmyadmin)
+2. Create database 'portfolio' and run SQL
+3. Also create 'studentdb' for Java project
+
+FOR JAVA:
+1. Create new Java project in Eclipse/VS Code
+2. Download MySQL JDBC driver (mysql-connector-java-8.x.jar)
+3. Add JDBC jar to project build path
+4. Create the 4 Java files above
+5. Run Main.java
+
+================================================================================

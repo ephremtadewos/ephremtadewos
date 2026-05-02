@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scientific Calculator</title>
+
+<style>
+  *{
+    margin:0; padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+  }
+  body{
+    height:90vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#13253d;
+  }
+  .calc{
+    width:450px;
+    background:#222;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 0 20px rgba(0,0,0,0.4);
+  }
+  #screen{
+    width:110%;
+    height:60px;
+    background:#000;
+    color:#0f0;
+    border:none;
+    padding:10px;
+    font-size:26px;
+    border-radius:10px;
+    margin-bottom:15px;
+    text-align:right;
+  }
+  .buttons{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:10px;
+  }
+  button{
+    padding:15px;
+    font-size:16px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    background:#444;
+    color:white;
+  }
+  button:hover{
+    background:#666;
+  }
+  .op{ background:#0066ff; }
+  .op:hover{ background:#004ecc; }
+  .eq{ background:#00aa00; }
+  .eq:hover{ background:#008800; }
+</style>
+</head>
+
+<body>
+
+<div class="calc">
+  <input type="text" id="screen" disabled>
+
+  <div class="buttons">
+    <button onclick="clr()">C</button>
+    <button onclick="back()">⌫</button>
+    <button class="op" onclick="press('(')">(</button>
+    <button class="op" onclick="press(')')">)</button>
+    <button class="op" onclick="press('/')">÷</button>
+
+    <button onclick="press('7')">7</button>
+    <button onclick="press('8')">8</button>
+    <button onclick="press('9')">9</button>
+    <button class="op" onclick="press('*')">×</button>
+    <button class="op" onclick="press('^')">xʸ</button>
+
+    <button onclick="press('4')">4</button>
+    <button onclick="press('5')">5</button>
+    <button onclick="press('6')">6</button>
+    <button class="op" onclick="press('-')">−</button>
+    <button class="op" onclick="press('sqrt(')">√</button>
+
+    <button onclick="press('1')">1</button>
+    <button onclick="press('2')">2</button>
+    <button onclick="press('3')">3</button>
+    <button class="op" onclick="press('+')">+</button>
+    <button class="op" onclick="press('sin(')">sin</button>
+
+    <button onclick="press('0')">0</button>
+    <button onclick="press('.')">.</button>
+    <button onclick="press('%')">%</button>
+    <button class="eq" onclick="calc()">=</button>
+    <button class="op" onclick="press('cos(')">cos</button>
+
+    <button class="op" onclick="press('tan(')">tan</button>
+    <button class="op" onclick="press('log(')">log</button>
+    <button class="op" onclick="press('ln(')">ln</button>
+    <button class="op" onclick="press('pi')">π</button>
+    <button class="op" onclick="press('e')">e</button>
+  </div>
+</div>
+<script>
+let screen = document.getElementById("screen");
+
+function press(val){
+  screen.value += val;
+}
+
+function clr(){
+  screen.value = "";
+}
+
+function back(){
+  screen.value = screen.value.slice(0, -1);
+}
+
+function calc(){
+  try{
+    let exp = screen.value
+      .replace(/sin/g, "Math.sin")
+      .replace(/cos/g, "Math.cos")
+      .replace(/tan/g, "Math.tan")
+      .replace(/log/g, "Math.log10")
+      .replace(/ln/g, "Math.log")
+      .replace(/sqrt/g, "Math.sqrt")
+      .replace(/pi/g, "Math.PI")
+      .replace(/e/g, "Math.E")
+      .replace(/\^/g, "**");
+
+    screen.value = eval(exp);
+  }
+  catch{
+    screen.value = "Error";
+  }
+}
+</script>
+<br><br><br><br><br><br>
+<h3 ><a href="projects.html" class="active">Projects</a></h3>
+</body>
+</html>

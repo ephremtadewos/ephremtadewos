@@ -1,0 +1,243 @@
+================================================================================
+                     DEPLOYMENT GUIDE - FREE HOSTING
+================================================================================
+
+This guide will help you deploy your portfolio website for FREE so anyone can 
+access it using your name (ephremtadewos.ephtech or similar).
+
+================================================================================
+                     OPTION 1: 000WEBHOST (RECOMMENDED)
+================================================================================
+
+STEP 1: Create Account
+-----------------------
+1. Go to: https://000webhostapp.com
+2. Click "Sign Up"
+3. Choose: "I want to build a website"
+4. Select: "PHP Website" (free)
+5. Sign up with email or Google account
+6. Verify your email
+
+STEP 2: Create Website
+-----------------------
+1. After login, click "Create new site"
+2. Enter your site name: ephrem-tadewos
+3. Your URL will be: https://ephrem-tadewos.000webhostapp.com
+
+STEP 3: Upload Files
+---------------------
+1. In 000webhost panel, go to "File Manager"
+2. Click "public_html" folder
+3. Delete all default files (except .htaccess)
+4. Click "Upload" button
+5. Upload ALL files from your proj folder:
+   - index.php, home.php, register.php
+   - contact.php, admin.php, logout.php
+   - setup.php, config.php, style.css
+   - (Upload each file or zip and extract)
+
+STEP 4: Setup Database
+----------------------
+1. In panel, go to "Databases" > "MySQL"
+2. Create database:
+   - Database name: portfolio
+   - Username: root (or your created user)
+   - Password: (leave empty or create one)
+3. Note down: Database name, User, Password
+
+STEP 5: Edit Config
+-------------------
+1. Go to File Manager > public_html
+2. Edit config.php:
+   - Change password to your MySQL password
+   - If username is not root, change it too
+3. Save file
+
+STEP 6: Run Setup
+-----------------
+1. Visit: https://your-site.000webhostapp.com/setup.php
+2. You should see "Setup Complete!"
+
+STEP 7: Your Site is LIVE!
+--------------------------
+- Main site: https://ephrem-tadewos.000webhostapp.com
+- Login: https://ephrem-tadewos.000webhostapp.com/index.php
+- Register: https://ephrem-tadewos.000webhostapp.com/register.php
+
+================================================================================
+                     OPTION 2: INFINITYFREE (NO ADS)
+================================================================================
+
+STEP 1: Sign Up
+---------------
+1. Go to: https://infinityfree.net
+2. Click "Get Free Hosting"
+3. Enter your email and create password
+4. Verify email
+
+STEP 2: Create Account
+----------------------
+1. After login, click "New Account"
+2. Domain: Choose "ephremtadewos.epizy.com" (free .epizy.com domain)
+3. Or connect your own domain
+
+STEP 3: Upload Files
+--------------------
+1. Go to "File Manager"
+2. Open htdocs folder
+3. Upload all your PHP/CSS files
+
+STEP 4: Setup Database
+----------------------
+1. Go to "MySQL Databases"
+2. Create database and user
+3. Update config.php with new credentials
+
+STEP 5: Visit Your Site
+-----------------------
+- URL: https://ephremtadewos.epizy.com
+
+================================================================================
+                     FILE STRUCTURE FOR UPLOAD
+================================================================================
+
+Your proj folder contains:
+├── index.php          (Login page)
+├── register.php       (Registration)
+├── home.php           (Portfolio home)
+├── contact.php        (Contact form)
+├── admin.php          (Admin dashboard)
+├── logout.php         (Logout)
+├── setup.php          (Database setup)
+├── config.php         (Database config) ⚠️ EDIT THIS
+├── style.css          (Styles)
+├── essential_code.txt (Reference)
+├── portfolio_code.php (Reference)
+└── README.md          (Documentation)
+
+Upload ALL .php and .css files to public_html/htdocs
+
+================================================================================
+                     CONFIG.PHP EDITING
+================================================================================
+
+Before uploading, edit config.php with your hosting credentials:
+
+BEFORE (Localhost):
+-------------------
+$servername = "localhost";
+$username   = "root";
+$password   = "";
+$dbname     = "portfolio";
+
+AFTER (000webhost):
+--------------------
+$servername = "localhost";
+$username   = "your_db_username";   // Check your hosting panel
+$password   = "your_db_password";   // Check your hosting panel  
+$dbname     = "your_db_name";       // Usually same as username_xxx
+
+================================================================================
+                     CUSTOM DOMAIN (ephremtadewos.com)
+================================================================================
+
+To use YOUR NAME domain (ephremtadewos.com):
+
+Option A: Free subdomain
+- 000webhost gives you: ephremtadewos.000webhostapp.com
+- No setup needed!
+
+Option B: Buy custom domain ($5/year)
+1. Go to: Namecheap.com or GoDaddy.com
+2. Buy: ephremtadewos.com ($5/year)
+3. In 000webhost: Settings > Domains > Add domain
+4. Point to nameservers from your domain provider
+5. Wait 24-48 hours for propagation
+
+================================================================================
+                     HOW TO TEST BEFORE GOING LIVE
+================================================================================
+
+1. XAMPP Test (local):
+   - Start Apache & MySQL in XAMPP
+   - Go to http://localhost/proj/
+   - Run setup.php first
+   - Test registration/login
+
+2. If errors appear:
+   - Check config.php database credentials
+   - Make sure database was created
+   - Check PHP version (need PHP 7+)
+
+================================================================================
+                     COMMON ISSUES & FIXES
+================================================================================
+
+Issue: "Cannot connect to database"
+Fix: Update config.php with correct DB credentials from hosting
+
+Issue: "Table doesn't exist"  
+Fix: Run setup.php on your live site
+
+Issue: "Session errors"
+Fix: Already fixed - use new config.php
+
+Issue: "404 errors on pages"
+Fix: Make sure .htaccess allows PHP routing (already configured)
+
+================================================================================
+                     IMPORTANT CHECKLIST BEFORE GOING LIVE
+================================================================================
+
+□ Run setup.php locally first and test registration
+□ Edit config.php with hosting database credentials
+□ Delete any test users from database
+□ Test login and logout
+□ Test contact form submission
+□ Check all links work
+□ Upload all files to hosting
+□ Run setup.php on live server
+□ Test live site registration
+
+================================================================================
+                     SUPPORT
+================================================================================
+
+If you need help:
+- 000webhost support: https://help.000webhost.com
+- InfinityFree: https://infinityfree.net/support
+
+================================================================================
+                     YOUR DEPLOYMENT SUMMARY
+================================================================================
+
+Option 1: 000WebHost (Quickest)
+- URL: https://ephrem-tadewos.000webhostapp.com
+- Cost: FREE
+- Ads: Some (minimal)
+
+Option 2: InfinityFree
+- URL: https://ephremtadewos.epizy.com
+- Cost: FREE  
+- Ads: None
+
+Option 3: Custom Domain
+- URL: https://ephremtadewos.com (you buy)
+- Cost: ~$5/year
+- Professional
+
+================================================================================
+                     QUICK START (5 MINUTES)
+================================================================================
+
+1. Go to https://000webhostapp.com
+2. Create account with email
+3. Create "ephrem-tadewos" website
+4. Upload all files to public_html
+5. Edit config.php with DB details
+6. Visit yoursite/setup.php
+7. DONE! Share your link!
+
+================================================================================
+Good luck! Your portfolio will be online soon! 🚀
+================================================================================
